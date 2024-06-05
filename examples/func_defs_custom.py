@@ -26,23 +26,29 @@ class FuncDefVisitor(c_ast.NodeVisitor):
         if type(node.decl.type.type) != c_ast.Struct:
             # print('%s at %s' % (node.decl.name, node.decl.coord))
 
-            # node.decl.type.type.show()
+            # node.decl.type.show()
             # 函数返回值类型
-            print('%s ' % node.decl.type.type.type.names[0], end='')
+            if type(node.decl.type.type.type) is c_ast.IdentifierType:
+                print('%s ' % node.decl.type.type.type.names[0], end='')
 
             # 函数名称
             print('%s(' % (node.decl.name), end='')
 
+            # node.decl.type.args.show()
             # 参数
-            for param_decl in node.decl.type.args.params:
-                # print('Arg name: %s' % param_decl.name)
-                if type(param_decl.type.type) is c_ast.TypeDecl:
-                    print('%s *' % param_decl.type.type.type.names[0], end='')
-                else:
-                    print('%s' % param_decl.type.type.names[0], end='')
+            if node.decl.type.args:
+                for param_decl in node.decl.type.args.params:
+                    # print('Arg name: %s' % param_decl.name)
+                    if type(param_decl.type.type) is c_ast.IdentifierType:
+                        print('%s' % param_decl.type.type.names[0], end='')
+                    elif type(param_decl.type.type) is c_ast.TypeDecl:
+                        if type(param_decl.type.type.type) is c_ast.IdentifierType:
+                            print('%s *' % param_decl.type.type.type.names[0], end='')
+                    else:
+                        pass
 
-                if param_decl != node.decl.type.args.params[-1]:
-                    print(', ', end='')
+                    if param_decl != node.decl.type.args.params[-1]:
+                        print(', ', end='')
 
             print(')\n')
 
@@ -52,12 +58,13 @@ hk32c0 = ['-E',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\lib\hk32c0\CMSIS\CM0\Core',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\lib\hk32c0\CMSIS\HK32C030xx\Include',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project',
-        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\ESMC01_G2N0B0A_S040',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\ESMC05_G2T0B0A_S449',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\src',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\src\sensors',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\hk32c0',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\hk32c0\driver',
-        r'-D__TASKING__']
+        r'-D__TASKING__',
+        r'-D__attribute__(x)=()']
 
 mm32f0140 = ['-E', 
         r'-I..\utils\fake_libc_include', 
@@ -70,7 +77,8 @@ mm32f0140 = ['-E',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\src\sensors',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\mm32f0140',
         r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\mm32f0140\driver',
-        r'-D__TASKING__']
+        r'-D__TASKING__',
+        r'-D__attribute__(x)=()']
 
 def show_func_defs(filename, opt):
     # Note that cpp is used. Provide a path to your own cpp or
@@ -89,7 +97,7 @@ if __name__ == "__main__":
             opt = mm32f0140
         elif sys.argv[1] == 'hk32c0':
             opt = hk32c0
-            
+
         filename  = sys.argv[2]
     else:
         filename = 'examples/c_files/memmgr.c'
