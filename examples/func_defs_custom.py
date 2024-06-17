@@ -80,6 +80,19 @@ mm32f0140 = ['-E',
         r'-D__TASKING__',
         r'-D__attribute__(x)=()']
 
+apm32f0 = ['-E', 
+        r'-I..\utils\fake_libc_include', 
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\lib\apm32f0\APM32F0xx_StdPeriphDriver\inc',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\lib\apm32f0\CMSIS\Include',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\EHDC01_G4T4L0C',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\src',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\src\sensors',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\apm32f030',
+        r'-IC:\Users\Dareplay\Documents\Workspace\CleanRobot\project\apm32f030\driver',
+        r'-D__TASKING__',
+        r'-D__attribute__(x)=()']
+
 def show_func_defs(filename, opt):
     # Note that cpp is used. Provide a path to your own cpp or
     # make sure one exists in PATH.
@@ -97,6 +110,8 @@ if __name__ == "__main__":
             opt = mm32f0140
         elif sys.argv[1] == 'hk32c0':
             opt = hk32c0
+        elif sys.argv[1] == 'apm32f0':
+            opt = apm32f0
 
         filename  = sys.argv[2]
     else:
